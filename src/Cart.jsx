@@ -36,6 +36,7 @@ const Cart = () => {
             mealName={cartItem.mealName}
             mealPrice={cartItem.price}
             mealImage={cartItem.mealImage}
+            mealCount={cartItem.mealCount}
           />
         ))}
       </div>

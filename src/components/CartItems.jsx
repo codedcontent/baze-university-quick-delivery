@@ -4,20 +4,53 @@ import { AiOutlineMinus } from "react-icons/ai";
 import { IoIosAdd } from "react-icons/io";
 import useAppState from "../hooks/useAppState";
 
-const CartItems = ({ type, mealName, mealPrice, mealImage }) => {
-  const { setAppState } = useAppState();
-
-  const [itemAmount, setItemAmount] = useState(1);
+const CartItems = ({ type, mealName, mealPrice, mealImage, mealCount }) => {
+  const { appState, setAppState } = useAppState();
+  const { cart } = appState;
 
   const incrementItemInCart = () => {
-    if (itemAmount !== 5) {
-      setItemAmount((prev) => prev + 1);
+    if (mealCount < 5) {
+      // Cart items to not increment
+      const cartItemsToNotIncrement = cart.filter(
+        (item) => item.mealName !== mealName
+      );
+
+      // The cart item to increment
+      const cartItemToIncrement = cart.find(
+        (item) => item.mealName === mealName
+      );
+
+      // Increment meal count
+      cartItemToIncrement.mealCount += 1;
+
+      setAppState((prev) => ({
+        ...prev,
+        cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+      }));
+    } else {
+      alert("You've reached the mac order limit!");
     }
   };
 
   const decrementItemInCart = () => {
-    if (itemAmount !== 1) {
-      setItemAmount((prev) => prev - 1);
+    if (mealCount !== 1) {
+      // Cart items to not increment
+      const cartItemsToNotIncrement = cart.filter(
+        (item) => item.mealName !== mealName
+      );
+
+      // The cart item to increment
+      const cartItemToIncrement = cart.find(
+        (item) => item.mealName === mealName
+      );
+
+      // Increment meal count
+      cartItemToIncrement.mealCount -= 1;
+
+      setAppState((prev) => ({
+        ...prev,
+        cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+      }));
     }
   };
 
@@ -63,7 +96,7 @@ const CartItems = ({ type, mealName, mealPrice, mealImage }) => {
             {/* Amount */}
             <div className="border-[1px] border-secondary w-8 h-8 flex place-content-center bg-white">
               <span className="text-secondary flex justify-center items-center">
-                {itemAmount}
+                {mealCount}
               </span>
             </div>
 

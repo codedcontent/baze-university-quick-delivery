@@ -7,20 +7,42 @@ import MyButton from "./MyButton";
 
 const MenuItem = ({ mealName, price, mealImage }) => {
   const { appState, setAppState } = useAppState();
-
   const { cart } = appState;
 
   const addToCart = () => {
-    // TODO: Prevent addition of duplicate meals. Increment the meal item count instead
-    const mealItemInCart = [];
+    const mealItemInCart = cart.find((item) => item.mealName === mealName);
 
-    console.log(mealItemInCart.find((item) => item.mealName === mealName));
+    if (mealItemInCart) {
+      // Prevent adding in max order limit reached
+      if (mealItemInCart.mealCount < 5) {
+        // Cart items to not increment
+        const cartItemsToNotIncrement = cart.filter(
+          (item) => item.mealName !== mealName
+        );
 
-    setAppState((prev) => ({
-      ...prev,
-      cart: [...prev.cart, { mealName, price, mealImage }],
-    }));
+        // The cart item to increment
+        const cartItemToIncrement = cart.find(
+          (item) => item.mealName === mealName
+        );
+
+        // Increment meal count
+        cartItemToIncrement.mealCount += 1;
+
+        setAppState((prev) => ({
+          ...prev,
+          cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+        }));
+      } else {
+        alert("You've reached the mac order limit!");
+      }
+    } else {
+      setAppState((prev) => ({
+        ...prev,
+        cart: [...prev.cart, { mealName, price, mealImage, mealCount: 1 }],
+      }));
+    }
   };
+
   return (
     <div className="flex w-full justify-between items-center border-[1px] p-5">
       <div className="space-y-1">
