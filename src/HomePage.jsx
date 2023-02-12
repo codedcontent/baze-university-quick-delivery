@@ -1,28 +1,35 @@
 import React from "react";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
 import heroImage from "./assets/green bg.jpg";
-import MyButton from "./components/MyButton";
 import MenuItem from "./components/MenuItem";
 import img1 from "./assets/fried chicken.jpg";
 import img2 from "./assets/jollof rice.jpg";
 import img3 from "./assets/fried rice -2.jpg";
 import useAppState from "./hooks/useAppState";
+import useScreenState from "./hooks/useScreenState";
 
 const HomePage = () => {
-  const { appState } = useAppState();
+  const { appState, setAppState } = useAppState();
+
+  const screenState = useScreenState();
 
   return (
     <div className="w-full h-full">
       {/* Nav */}
-      <nav className="w-[75%] bg-primary h-20 fixed top-16 left-0 flex justify-between items-center px-20 z-20">
+      <nav className="xl:w-[75%] lg:w-[65%] md:w-full bg-primary h-20 fixed top-16 left-0 flex justify-between items-center xl:px-20 lg:px-16 md:px-12 z-20">
         {/* Logo name */}
         <div className="flex flex-col justify-center items-center">
           <p className="text-3xl font-bold text-white">Baze University</p>
           <p className="text-sm text-white">Quick Deliveries</p>
         </div>
 
-        {/* Cart */}
-        <div className="relative">
+        {/* Cart Button */}
+        <div
+          className="relative"
+          onClick={() => {
+            setAppState((prev) => ({ ...prev, showCart: true }));
+          }}
+        >
           <div className="absolute top-1 -right-[2px] flex justify-center items-center">
             <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
 
@@ -38,7 +45,7 @@ const HomePage = () => {
 
       {/* Hero Section */}
       <div
-        className="flex flex-col relative justify-center items-center  w-full object-cover bg-center"
+        className="flex flex-col relative justify-center items-center w-[100.1%] object-cover bg-center"
         style={{
           backgroundImage: `url('${heroImage}')`,
           height: "calc(100vh - 64px)",
@@ -72,16 +79,21 @@ const HomePage = () => {
       </div>
 
       {/* Menu Section */}
-      <div className="w-full px-20 py-10 border-x-[1px]" id="menu">
+      <div
+        className="w-full xl:px-20 md:px-12 lg:px-16 py-10 border-x-[1px]"
+        id="menu"
+      >
         <p className="text-3xl text-accent">Browse our menu</p>
         <p className="text-lg text-accent">
           Check out our affordable meals and more filling meals
         </p>
 
-        <div className="grid grid-cols-3 mt-10 gap-y-3">
+        <div className="grid grid-cols-3 lg:mt-10 md:mt-8 gap-y-3">
           <MenuItem mealName={"Chicken"} mealImage={img1} price={1500} />
           <MenuItem mealName={"Jollof Rice"} mealImage={img2} price={900} />
           <MenuItem mealName={"Fried Rice"} mealImage={img3} price={900} />
+          <MenuItem mealName={"Fried Ric"} mealImage={img3} price={900} />
+          <MenuItem mealName={"Frie Rice"} mealImage={img3} price={900} />
         </div>
       </div>
     </div>

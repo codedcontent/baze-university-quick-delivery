@@ -28,12 +28,19 @@ const MenuItem = ({ mealName, price, mealImage }) => {
         // Increment meal count
         cartItemToIncrement.mealCount += 1;
 
+        // Get the index of the item to increment
+        const indexOfItemToIncrement = cart.findIndex(
+          (item) => item.mealName === mealName
+        );
+
+        cart.splice(indexOfItemToIncrement, 1, cartItemToIncrement);
+
         setAppState((prev) => ({
           ...prev,
-          cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+          cart: [...cart],
         }));
       } else {
-        alert("You've reached the mac order limit!");
+        alert("You've reached the max order limit!");
       }
     } else {
       setAppState((prev) => ({
@@ -44,7 +51,7 @@ const MenuItem = ({ mealName, price, mealImage }) => {
   };
 
   return (
-    <div className="flex w-full justify-between items-center border-[1px] p-5">
+    <div className="flex w-full justify-between items-center border-[1px] xl:p-5 lg:p-4 md:p-3 xl:flex-row md:flex-col-reverse md:items-start">
       <div className="space-y-1">
         <p className="font-bold text-lg">{mealName}</p>
         <p className="font-medium">₦ {price}</p>
@@ -55,7 +62,7 @@ const MenuItem = ({ mealName, price, mealImage }) => {
       <img
         src={mealImage}
         alt="menu item image"
-        className="h-20 w-20 object-cover rounded-full"
+        className="h-20 w-20 object-cover rounded-full md:mb-2"
       />
     </div>
   );

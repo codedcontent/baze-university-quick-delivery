@@ -23,12 +23,19 @@ const CartItems = ({ type, mealName, mealPrice, mealImage, mealCount }) => {
       // Increment meal count
       cartItemToIncrement.mealCount += 1;
 
+      // Get the index of the item to increment
+      const indexOfItemToIncrement = cart.findIndex(
+        (item) => item.mealName === mealName
+      );
+
+      cart.splice(indexOfItemToIncrement, 1, cartItemToIncrement);
+
       setAppState((prev) => ({
         ...prev,
-        cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+        cart: [...cart],
       }));
     } else {
-      alert("You've reached the mac order limit!");
+      alert("You've reached the max order limit!");
     }
   };
 
@@ -47,18 +54,22 @@ const CartItems = ({ type, mealName, mealPrice, mealImage, mealCount }) => {
       // Increment meal count
       cartItemToIncrement.mealCount -= 1;
 
+      // Get the index of the item to increment
+      const indexOfItemToIncrement = cart.findIndex(
+        (item) => item.mealName === mealName
+      );
+
+      cart.splice(indexOfItemToIncrement, 1, cartItemToIncrement);
+
       setAppState((prev) => ({
         ...prev,
-        cart: [...cartItemsToNotIncrement, cartItemToIncrement],
+        cart: [...cart],
       }));
     }
   };
 
   const removeItemFromCart = () => {
     setAppState((prev) => {
-      console.log(
-        prev.cart.filter((itemInCart) => itemInCart.mealName !== mealName)
-      );
       return {
         ...prev,
         cart: prev.cart.filter(

@@ -2,8 +2,14 @@ import Banner from "./Banner";
 import Cart from "./Cart";
 import HomePage from "./HomePage";
 import app from "./firebase";
+import useAppState from "./hooks/useAppState";
+import useScreenState from "./hooks/useScreenState";
 
 function App() {
+  const { appState } = useAppState();
+  const { showCart } = appState;
+  const { screenWidth } = useScreenState();
+
   return (
     <div className="relative h-screen">
       {/* Banner */}
@@ -16,7 +22,7 @@ function App() {
       >
         {/* Home Page */}
         <div
-          className="w-[75%] border-r-[1px]"
+          className={`xl:w-[75%] lg:w-[65%] md:w-full border-r-[1px]`}
           style={{ height: "calc(100vh - 64px)" }}
         >
           <HomePage />
@@ -24,7 +30,9 @@ function App() {
 
         {/* Cart */}
         <div
-          className="w-[25%] fixed right-0 top-16"
+          className={`xl:w-[25%] lg:w-[35%] md:w-full fixed right-0 top-16 ${
+            showCart ? "w-full md:block z-50 bg-white" : "md:hidden"
+          }`}
           style={{ height: "calc(100vh - 64px)" }}
         >
           <Cart />

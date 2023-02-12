@@ -5,6 +5,7 @@ const AppStateContext = createContext();
 export const AppStateProvider = ({ children }) => {
   const [appState, setAppState] = useState({
     cart: [],
+    showCart: false,
   });
 
   return (

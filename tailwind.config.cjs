@@ -12,6 +12,13 @@ module.exports = {
         accent: "#6A5B5C",
       },
     },
+    screens: {
+      xs: "320px",
+      sm: "480px",
+      md: "768px",
+      lg: "976px",
+      xl: "1440px",
+    },
   },
   plugins: [],
 };
