@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import img1 from "../assets/fried rice -2.jpg";
 import { AiOutlineMinus } from "react-icons/ai";
 import { IoIosAdd } from "react-icons/io";
 import useAppState from "../hooks/useAppState";
@@ -80,14 +79,14 @@ const CartItems = ({ type, mealName, mealPrice, mealImage, mealCount }) => {
   };
 
   return (
-    <div className="flex gap-4 select-none">
+    <div className="flex gap-4 select-none w-full">
       <img
         src={mealImage}
         alt="cart item image"
         className="h-14 w-14 object-cover rounded-full"
       />
 
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-col gap-1 w-full">
         <span className="text-sm font-medium">{mealName}</span>
         <span className="text-sm font-bold">₦ {mealPrice}</span>
 

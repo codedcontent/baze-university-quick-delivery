@@ -2,8 +2,8 @@ import React from "react";
 
 const Banner = () => {
   return (
-    <div className="h-16 flex w-full items-center xl:px-20 lg:px-16 md:px-12 border-b-[1px] fixed top-0 left-0 z-10 bg-white">
-      <p className="font-poppins w-max">
+    <div className="h-16 flex w-full items-center xl:px-20 lg:px-16 md:px-12 px-5 border-b-[1px] fixed top-0 left-0 z-10 bg-white">
+      <p className="font-poppins w-max md:text-base text-xs">
         <span className="text-secondary underline font-bold">
           Refer a friend
         </span>{" "}

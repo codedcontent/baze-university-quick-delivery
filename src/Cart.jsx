@@ -45,33 +45,34 @@ const Cart = () => {
       </div>
 
       {/* Cart Items */}
-      <div
-        className="px-10 mb-32 space-y-8 overflow-y-scroll flex-1 pt-4"
-        id="cartItems"
-      >
-        {cart.map((cartItem, index) => (
-          <CartItems
-            key={index}
-            mealName={cartItem.mealName}
-            mealPrice={cartItem.price}
-            mealImage={cartItem.mealImage}
-            mealCount={cartItem.mealCount}
-          />
-        ))}
+      <div className="px-10 mb-32 overflow-y-scroll flex-1 pt-4" id="cartItems">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1 gap-8">
+          {cart.map((cartItem, index) => (
+            <CartItems
+              key={index}
+              mealName={cartItem.mealName}
+              mealPrice={cartItem.price}
+              mealImage={cartItem.mealImage}
+              mealCount={cartItem.mealCount}
+            />
+          ))}
+        </div>
       </div>
 
       {/* Cart Checkout */}
       {cart.length > 0 && (
         <div className="w-full py-2 bg-white px-10 border-y-[1px] absolute left-0 bottom-0 space-y-2">
           <p className="text-sm">
-            Take away pack -{" "}
+            Take away pack --{" "}
             <span className="font-bold">
               ₦ 100 * {cart.length} = {cart.length * 100}
             </span>
           </p>
+
           <p className="text-sm">
-            Delivery fee - <span className="font-bold">₦ 200</span>
+            Delivery fee -- <span className="font-bold">₦ 200</span>
           </p>
+
           <div className="flex w-full justify-between">
             <MyButton title={"Make an order"} />
 

@@ -51,7 +51,7 @@ const MenuItem = ({ mealName, price, mealImage }) => {
   };
 
   return (
-    <div className="flex w-full justify-between items-center border-[1px] xl:p-5 lg:p-4 md:p-3 xl:flex-row md:flex-col-reverse md:items-start">
+    <div className="flex w-full justify-between items-center border-[1px] xl:p-5 lg:p-4 p-3 xl:flex-row md:flex-col-reverse md:items-start">
       <div className="space-y-1">
         <p className="font-bold text-lg">{mealName}</p>
         <p className="font-medium">₦ {price}</p>

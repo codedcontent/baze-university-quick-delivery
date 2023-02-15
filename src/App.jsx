@@ -4,11 +4,23 @@ import HomePage from "./HomePage";
 import app from "./firebase";
 import useAppState from "./hooks/useAppState";
 import useScreenState from "./hooks/useScreenState";
+import { useEffect } from "react";
 
 function App() {
-  const { appState } = useAppState();
+  const { appState, setAppState } = useAppState();
   const { showCart } = appState;
   const { screenWidth } = useScreenState();
+
+  // UseEffect to check for changes in screen size and set cart visibility
+  useEffect(() => {
+    if (screenWidth <= 976) {
+      if (!showCart) {
+        setAppState((prev) => ({ ...prev, showCart: false }));
+      }
+    } else {
+      setAppState((prev) => ({ ...prev, showCart: true }));
+    }
+  }, [screenWidth]);
 
   return (
     <div className="relative h-screen">
@@ -22,21 +34,23 @@ function App() {
       >
         {/* Home Page */}
         <div
-          className={`xl:w-[75%] lg:w-[65%] md:w-full border-r-[1px]`}
+          className={`xl:w-[75%] lg:w-[65%] sm:w-full border-r-[1px]`}
           style={{ height: "calc(100vh - 64px)" }}
         >
           <HomePage />
         </div>
 
         {/* Cart */}
-        <div
-          className={`xl:w-[25%] lg:w-[35%] md:w-full fixed right-0 top-16 ${
-            showCart ? "w-full md:block z-50 bg-white" : "md:hidden"
-          }`}
-          style={{ height: "calc(100vh - 64px)" }}
-        >
-          <Cart />
-        </div>
+        {showCart && (
+          <div
+            className={`xl:w-[25%] lg:w-[35%] sm:w-full fixed right-0 top-16 ${
+              showCart ? "w-full sm:block z-50 bg-white" : "sm:hidden"
+            }`}
+            style={{ height: "calc(100vh - 64px)" }}
+          >
+            <Cart />
+          </div>
+        )}
       </div>
     </div>
   );
