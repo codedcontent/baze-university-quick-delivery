@@ -1,7 +1,4 @@
-import { push } from "firebase/database";
 import React from "react";
-import img1 from "../assets/fried rice -2.jpg";
-import { db, ref, set } from "../firebase";
 import useAppState from "../hooks/useAppState";
 import MyButton from "./MyButton";
 

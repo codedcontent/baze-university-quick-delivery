@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MyButton from "./components/MyButton";
 import img1 from "./assets/fried chicken.jpg";
+import OrderItem from "./components/OrderItem";
 
 const Admin = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [password, setPassword] = useState("");
 
   const UserNotAuthenticated = () => {
@@ -41,6 +42,27 @@ const Admin = () => {
   };
 
   const UserIsAuthenticated = () => {
+    const orderDetails = {
+      phoneNumber: "phoneNum",
+      order: [
+        {
+          mealCount: 2,
+          mealImage: img1,
+          mealPrice: 1500,
+          mealName: "Chicken",
+        },
+        {
+          mealCount: 1,
+          mealImage: img1,
+          mealPrice: 500,
+          mealName: "White Rice",
+        },
+      ],
+    };
+
+    // TODO: UseEffect to fetch all the orders continuously
+    useEffect(() => {}, []);
+
     return (
       <div className="h-full w-full px-20 py-10">
         <p className="font-semibold text-xl text-accent">
@@ -48,43 +70,7 @@ const Admin = () => {
         </p>
 
         <div className="flex flex-wrap mt-4 gap-4">
-          <div className="space-y-2">
-            {/* Order num to fulfill */}
-            <span className="font-black">Order 1</span>
-
-            {/* Order Info */}
-            <div className="flex gap-4 p-3 border-2 rounded-md">
-              {/* <img
-                src={img1}
-                alt="cart item image"
-                className="h-14 w-14 object-cover rounded-full"
-              /> */}
-
-              <div className="flex flex-col gap-2">
-                <span className="text-sm">
-                  Meal:{" "}
-                  <span className="font-bold">
-                    Fried Rice, Chicken, Salad, Fish
-                  </span>
-                </span>
-
-                <span className="text-sm">
-                  Amount to pay: <span className="font-bold">₦ 900</span>
-                </span>
-
-                <span className="text-sm">
-                  Payment type: <span className="font-bold">Transfer</span>
-                </span>
-
-                <button
-                  className="py-2 cursor-pointer bg-secondary text-white px-4 rounded-md flex justify-center items-center"
-                  // onClick={buttonAction}
-                >
-                  Completed Order
-                </button>
-              </div>
-            </div>
-          </div>
+          <OrderItem orderDetails={orderDetails} index={1} />
         </div>
       </div>
     );
