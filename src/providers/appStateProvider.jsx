@@ -6,6 +6,8 @@ export const AppStateProvider = ({ children }) => {
   const [appState, setAppState] = useState({
     cart: [],
     showCart: true,
+    showOverlay: false,
+    phoneNumber: "",
   });
 
   return (

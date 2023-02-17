@@ -1,8 +1,8 @@
-import { Close } from "@mui/icons-material";
 import React from "react";
 import CartItems from "./components/CartItems";
 import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
+import { Close } from "@mui/icons-material";
 
 const Cart = () => {
   const { appState, setAppState } = useAppState();
@@ -74,7 +74,12 @@ const Cart = () => {
           </p>
 
           <div className="flex w-full justify-between">
-            <MyButton title={"Make an order"} />
+            <MyButton
+              title={"Make an order"}
+              buttonAction={() => {
+                setAppState((prev) => ({ ...prev, showOverlay: true }));
+              }}
+            />
 
             <div className="flex flex-col justify-center items-center">
               <p className="">Total</p>
