@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import app from "./firebase";
 import App from "./App";
 import "./index.css";
 import { AppStateProvider } from "./providers/appStateProvider";

@@ -1,7 +1,6 @@
 import Banner from "./Banner";
 import Cart from "./Cart";
 import HomePage from "./HomePage";
-import app from "./firebase";
 import useAppState from "./hooks/useAppState";
 import useScreenState from "./hooks/useScreenState";
 import { useEffect } from "react";

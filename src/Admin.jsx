@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import MyButton from "./components/MyButton";
 import img1 from "./assets/fried chicken.jpg";
 import OrderItem from "./components/OrderItem";
+import { ref, onValue } from "firebase/database";
+import { db } from "./firebase";
 
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
@@ -42,36 +44,73 @@ const Admin = () => {
   };
 
   const UserIsAuthenticated = () => {
-    const orderDetails = {
-      phoneNumber: "phoneNum",
-      order: [
-        {
-          mealCount: 2,
-          mealImage: img1,
-          mealPrice: 1500,
-          mealName: "Chicken",
-        },
-        {
-          mealCount: 1,
-          mealImage: img1,
-          mealPrice: 500,
-          mealName: "White Rice",
-        },
-      ],
-    };
+    // const orderDetails = {
+    //   phoneNumber: "phoneNum",
+    //   order: [
+    //     {
+    //       mealCount: 2,
+    //       mealImage: img1,
+    //       mealPrice: 1500,
+    //       mealName: "Chicken",
+    //     },
+    //     {
+    //       mealCount: 1,
+    //       mealImage: img1,
+    //       mealPrice: 500,
+    //       mealName: "White Rice",
+    //     },
+    //   ],
+    // };
 
-    // TODO: UseEffect to fetch all the orders continuously
-    useEffect(() => {}, []);
+    const [allOrders, setAllOrders] = useState(null);
+
+    useEffect(() => {
+      const allOrdersRef = ref(db, "allOrders");
+      onValue(allOrdersRef, (snapshot) => {
+        if (!snapshot.exists()) return;
+
+        const data = snapshot.val();
+
+        const mappedOrders = Object.entries(data).map((entry) => ({
+          orderId: entry[0],
+          order: entry[1].order,
+          phoneNumber: entry[1].phoneNumber,
+          timestamp: entry[1].timestamp,
+        }));
+
+        setAllOrders(mappedOrders);
+      });
+
+      return () => {
+        // second
+      };
+    }, []);
 
     return (
       <div className="h-full w-full px-20 py-10">
-        <p className="font-semibold text-xl text-accent">
-          Here are the orders coming in...
-        </p>
+        {!allOrders ? (
+          <h1 className="text-xl">
+            No orders yet. Get of your butts and go reach out to potential
+            customers.
+          </h1>
+        ) : (
+          <>
+            <p className="font-semibold text-lg text-accent">
+              Here are the orders coming in, fulfill them fast, LET'S GOOOOOO
+              🚀🚀🚀
+            </p>
 
-        <div className="flex flex-wrap mt-4 gap-4">
-          <OrderItem orderDetails={orderDetails} index={1} />
-        </div>
+            <div className="flex flex-wrap mt-10 gap-4">
+              {allOrders.map((orderDetails, index) => (
+                <OrderItem
+                  orderDetails={orderDetails}
+                  key={orderDetails.orderId}
+                  index={index}
+                />
+              ))}
+            </div>
+          </>
+        )}
       </div>
     );
   };

@@ -11,15 +11,17 @@ const formatter = new Intl.NumberFormat("en-US", {
 const OrderItem = ({ orderDetails, index }) => {
   const { phoneNumber, order } = orderDetails;
 
+  console.log(orderDetails);
+
   // The total amount that the customer will buy for all the meals they ordered.
   const totalAmountToPay = order
-    .map((orderItem) => orderItem.mealPrice)
+    .map((orderItem) => orderItem.price)
     .reduce((acc, currentVal) => acc + currentVal);
 
   return (
     <div className="space-y-2">
       {/* Order num to fulfill */}
-      <span className="font-black">Order {index}</span>
+      <span className="font-black">Order {index + 1}</span>
 
       {/* Order Info */}
       <div className="flex flex-col gap-2 p-3 border-2 rounded-md">
@@ -43,10 +45,16 @@ const OrderItem = ({ orderDetails, index }) => {
         ))}
 
         <span className="text-sm font-bold flex justify-between items-center w-full gap-4">
-          Amount to pay:{" "}
+          Amount to receive:{" "}
           <span className="text-secondary">
             {formatter.format(totalAmountToPay)}
           </span>
+        </span>
+
+        {/* Customer contact */}
+        <span className="text-sm font-bold flex justify-between items-center w-full gap-4">
+          Customer contact:{" "}
+          <span className="text-secondary">{phoneNumber}</span>
         </span>
 
         <button
