@@ -13,7 +13,7 @@ const Admin = () => {
     return (
       <div className="h-full w-full flex flex-col justify-center items-center">
         <form
-          className="w-1/2 border-2 border-secondary p-5 rounded-md space-y-6"
+          className="md:w-1/2 w-4/5 border-2 border-secondary p-5 rounded-md space-y-6"
           onSubmit={(e) => {
             e.preventDefault();
 
@@ -67,7 +67,7 @@ const Admin = () => {
     }, [orderCompleted]);
 
     return (
-      <div className="h-full w-full px-20 py-10">
+      <div className="h-full w-full md:px-20 px-10 md:py-10 py-5">
         {!allOrders ? (
           <h1 className="text-xl">
             No orders yet. Get of your butts and go reach out to potential
