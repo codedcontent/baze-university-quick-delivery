@@ -1,6 +1,6 @@
 import React from "react";
-import img1 from "../assets/fried rice -2.jpg";
-import MyButton from "./MyButton";
+import { ref, onValue, remove } from "firebase/database";
+import { db } from "../firebase";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -8,15 +8,20 @@ const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
-const OrderItem = ({ orderDetails, index }) => {
+const OrderItem = ({ orderDetails, index, setOrderCompleted }) => {
   const { phoneNumber, order } = orderDetails;
-
-  console.log(orderDetails);
 
   // The total amount that the customer will buy for all the meals they ordered.
   const totalAmountToPay = order
     .map((orderItem) => orderItem.price)
     .reduce((acc, currentVal) => acc + currentVal);
+
+  const completeOrder = () => {
+    const orderToCompleteRef = ref(db, `allOrders/${orderDetails.orderId}`);
+
+    remove(orderToCompleteRef);
+    setOrderCompleted(true);
+  };
 
   return (
     <div className="space-y-2">
@@ -54,12 +59,14 @@ const OrderItem = ({ orderDetails, index }) => {
         {/* Customer contact */}
         <span className="text-sm font-bold flex justify-between items-center w-full gap-4">
           Customer contact:{" "}
-          <span className="text-secondary">{phoneNumber}</span>
+          <span className="text-secondary font-normal underline">
+            {phoneNumber}
+          </span>
         </span>
 
         <button
           className="py-2 cursor-pointer bg-secondary text-white px-4 rounded-md flex justify-center items-center"
-          // onClick={buttonAction}
+          onClick={completeOrder}
         >
           Completed Order
         </button>

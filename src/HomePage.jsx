@@ -6,41 +6,45 @@ import img1 from "./assets/fried chicken.jpg";
 import img2 from "./assets/jollof rice.jpg";
 import img3 from "./assets/fried rice -2.jpg";
 import useAppState from "./hooks/useAppState";
+import useScreenState from "./hooks/useScreenState";
 
 const HomePage = () => {
   const { appState, setAppState } = useAppState();
+  const { screenWidth } = useScreenState();
 
   return (
     <div className="w-full h-full">
       {/* Nav */}
-      <nav className="xl:w-[75%] lg:w-[65%] w-full bg-primary h-20 fixed top-16 left-0 flex justify-between items-center xl:px-20 lg:px-16 px-12 z-20">
-        {/* Logo name */}
-        <div className="flex flex-col justify-center items-center">
-          <p className="md:text-3xl text-xl font-bold text-white">
-            Baze University
-          </p>
-          <p className="md:text-sm text-xs text-white">Quick Deliveries</p>
-        </div>
-
-        {/* Cart Button */}
-        <div
-          className="relative"
-          onClick={() => {
-            setAppState((prev) => ({ ...prev, showCart: true }));
-          }}
-        >
-          <div className="absolute top-1 -right-[2px] flex justify-center items-center">
-            <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
-
-            <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
+      {screenWidth < 976 && !appState.showCart && (
+        <nav className="xl:w-[75%] lg:w-[65%] w-full bg-primary h-20 fixed top-16 left-0 flex justify-between items-center xl:px-20 lg:px-16 px-12 z-20">
+          {/* Logo name */}
+          <div className="flex flex-col justify-center items-center">
+            <p className="md:text-3xl text-xl font-bold text-white">
+              Baze University
+            </p>
+            <p className="md:text-sm text-xs text-white">Quick Deliveries</p>
           </div>
 
-          <ShoppingCartOutlinedIcon
-            className="text-white"
-            invisible={appState.cart.length > 0 ? "true" : "false"}
-          />
-        </div>
-      </nav>
+          {/* Cart Button */}
+          <div
+            className="relative"
+            onClick={() => {
+              setAppState((prev) => ({ ...prev, showCart: true }));
+            }}
+          >
+            <div className="absolute top-1 -right-[2px] flex justify-center items-center">
+              <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
+
+              <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
+            </div>
+
+            <ShoppingCartOutlinedIcon
+              className="text-white"
+              invisible={appState.cart.length > 0 ? "true" : "false"}
+            />
+          </div>
+        </nav>
+      )}
 
       {/* Hero Section */}
       <div

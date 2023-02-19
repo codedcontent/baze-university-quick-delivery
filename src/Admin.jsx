@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import MyButton from "./components/MyButton";
-import img1 from "./assets/fried chicken.jpg";
 import OrderItem from "./components/OrderItem";
 import { ref, onValue } from "firebase/database";
 import { db } from "./firebase";
@@ -8,6 +7,7 @@ import { db } from "./firebase";
 const Admin = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [password, setPassword] = useState("");
+  const [orderCompleted, setOrderCompleted] = useState(false);
 
   const UserNotAuthenticated = () => {
     return (
@@ -44,28 +44,11 @@ const Admin = () => {
   };
 
   const UserIsAuthenticated = () => {
-    // const orderDetails = {
-    //   phoneNumber: "phoneNum",
-    //   order: [
-    //     {
-    //       mealCount: 2,
-    //       mealImage: img1,
-    //       mealPrice: 1500,
-    //       mealName: "Chicken",
-    //     },
-    //     {
-    //       mealCount: 1,
-    //       mealImage: img1,
-    //       mealPrice: 500,
-    //       mealName: "White Rice",
-    //     },
-    //   ],
-    // };
-
     const [allOrders, setAllOrders] = useState(null);
 
     useEffect(() => {
       const allOrdersRef = ref(db, "allOrders");
+
       onValue(allOrdersRef, (snapshot) => {
         if (!snapshot.exists()) return;
 
@@ -79,12 +62,9 @@ const Admin = () => {
         }));
 
         setAllOrders(mappedOrders);
+        setOrderCompleted(false);
       });
-
-      return () => {
-        // second
-      };
-    }, []);
+    }, [orderCompleted]);
 
     return (
       <div className="h-full w-full px-20 py-10">
@@ -106,6 +86,8 @@ const Admin = () => {
                   orderDetails={orderDetails}
                   key={orderDetails.orderId}
                   index={index}
+                  orderCompleted={orderCompleted}
+                  setOrderCompleted={setOrderCompleted}
                 />
               ))}
             </div>

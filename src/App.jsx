@@ -15,6 +15,8 @@ function App() {
 
   // UseEffect to check for changes in screen size and set cart visibility
   useEffect(() => {
+    console.log(screenWidth);
+
     if (screenWidth <= 976) {
       if (!showCart) {
         setAppState((prev) => ({ ...prev, showCart: false }));
