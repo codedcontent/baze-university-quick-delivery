@@ -11,7 +11,7 @@
 
 .banner__animation {
   transition: all;
-  animation: banner_slide 60s ease 0s infinite;
+  animation: banner_slide 30s ease 0s infinite;
 }
 
 body::-webkit-scrollbar {
