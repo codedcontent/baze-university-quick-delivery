@@ -1,5 +1,5 @@
 import React from "react";
-import { ref, onValue, remove } from "firebase/database";
+import { ref, remove } from "firebase/database";
 import { db } from "../firebase";
 
 const formatter = new Intl.NumberFormat("en-US", {

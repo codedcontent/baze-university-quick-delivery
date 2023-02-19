@@ -5,7 +5,7 @@ import { ref, onValue } from "firebase/database";
 import { db } from "./firebase";
 
 const Admin = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [password, setPassword] = useState("");
   const [orderCompleted, setOrderCompleted] = useState(false);
 
@@ -99,8 +99,6 @@ const Admin = () => {
 
   const handleLogin = () => {
     const authPassword = import.meta.env.VITE_ADMIN_PASSWORD;
-
-    console.log(authPassword, password);
 
     if (authPassword === password) {
       setIsAuthenticated(true);
