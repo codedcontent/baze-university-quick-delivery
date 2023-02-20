@@ -77,13 +77,13 @@ const HomePage = () => {
             </button>
           </a>
 
-          <button
+          {/* <button
             className="md:py-4 py-2 cursor-pointer border-secondary border-[1px] bg-white text-secondary md:px-6 px-3 rounded-md flex justify-center items-center md:text-base text-sm"
             // onClick={buttonAction}
             // type={type}
           >
             Top-up your meal balance
-          </button>
+          </button> */}
         </div>
       </div>
 
