@@ -15,7 +15,42 @@ const HomePage = () => {
   return (
     <div className="w-full h-full">
       {/* Nav */}
-      {screenWidth < 976 && !appState.showCart && (
+      {screenWidth < 976 ? (
+        <>
+          {!appState.showCart && (
+            <nav className="xl:w-[75%] lg:w-[65%] w-full bg-primary h-20 fixed top-16 left-0 flex justify-between items-center xl:px-20 lg:px-16 px-12 z-20">
+              {/* Logo name */}
+              <div className="flex flex-col justify-center items-center">
+                <p className="md:text-3xl text-xl font-bold text-white">
+                  Baze University
+                </p>
+                <p className="md:text-sm text-xs text-white">
+                  Quick Deliveries
+                </p>
+              </div>
+
+              {/* Cart Button */}
+              <div
+                className="relative"
+                onClick={() => {
+                  setAppState((prev) => ({ ...prev, showCart: true }));
+                }}
+              >
+                <div className="absolute top-1 -right-[2px] flex justify-center items-center">
+                  <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
+
+                  <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
+                </div>
+
+                <ShoppingCartOutlinedIcon
+                  className="text-white"
+                  invisible={appState.cart.length > 0 ? "true" : "false"}
+                />
+              </div>
+            </nav>
+          )}
+        </>
+      ) : (
         <nav className="xl:w-[75%] lg:w-[65%] w-full bg-primary h-20 fixed top-16 left-0 flex justify-between items-center xl:px-20 lg:px-16 px-12 z-20">
           {/* Logo name */}
           <div className="flex flex-col justify-center items-center">
@@ -77,13 +112,13 @@ const HomePage = () => {
             </button>
           </a>
 
-          {/* <button
+          <button
             className="md:py-4 py-2 cursor-pointer border-secondary border-[1px] bg-white text-secondary md:px-6 px-3 rounded-md flex justify-center items-center md:text-base text-sm"
             // onClick={buttonAction}
             // type={type}
           >
             Top-up your meal balance
-          </button> */}
+          </button>
         </div>
       </div>
 
