@@ -8,7 +8,7 @@ import CheckoutOverlay from "./CheckoutOverlay";
 
 function App() {
   const { appState, setAppState } = useAppState();
-  const { showCart, showOverlay, phoneNumber, cart } = appState;
+  const { showCart, showOverlay } = appState;
   const { screenWidth } = useScreenState();
 
   // UseEffect to check for changes in screen size and set cart visibility

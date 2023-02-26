@@ -1,5 +1,5 @@
 import React, { useImperativeHandle } from "react";
-import { ref, remove } from "firebase/database";
+import { doc, deleteDoc } from "firebase/firestore";
 import { db } from "../firebase";
 import useAppState from "../hooks/useAppState";
 
@@ -9,7 +9,13 @@ const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
-const OrderItem = ({ orderDetails, index, setOrderCompleted, innerRef }) => {
+const OrderItem = ({
+  orderDetails,
+  orderId,
+  index,
+  setOrderCompleted,
+  innerRef,
+}) => {
   const { setAppState } = useAppState();
 
   const { paymentInfo, order } = orderDetails;
@@ -19,15 +25,17 @@ const OrderItem = ({ orderDetails, index, setOrderCompleted, innerRef }) => {
     .map((orderItem) => orderItem.price)
     .reduce((acc, currentVal) => acc + currentVal);
 
+  const completeOrder = async () => {
+    setOrderCompleted(true);
+
+    setAppState((prev) => ({ ...prev, showAdminOverlay: false }));
+
+    await deleteDoc(doc(db, `allOrders/${orderDetails.orderId}`));
+  };
+
   useImperativeHandle(innerRef, () => ({
-    completeOrder() {
-      const orderToCompleteRef = ref(db, `allOrders/${orderDetails.orderId}`);
-
-      remove(orderToCompleteRef);
-
-      setOrderCompleted(true);
-
-      setAppState((prev) => ({ ...prev, showAdminOverlay: false }));
+    startOrderCompletion() {
+      completeOrder();
     },
   }));
 

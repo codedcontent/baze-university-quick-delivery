@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
-import { usePaystackPayment, PaystackButton } from "react-paystack";
-import { db, push, set, ref } from "./firebase";
-import { serverTimestamp } from "firebase/database";
+import { usePaystackPayment } from "react-paystack";
+import { db } from "./firebase";
 import constants from "./constants/constants";
+import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 
 const CheckoutOverlay = () => {
   const { appState, setAppState } = useAppState();
@@ -34,20 +34,16 @@ const CheckoutOverlay = () => {
   const config = {
     reference: new Date().getTime().toString(),
     email: paymentInfo.email,
-    amount: amountToPay * 100, //Amount is in the country's lowest currency. E.g Kobo, so 20000 kobo = N200
+    amount: amountToPay * 100,
     publicKey: import.meta.env.VITE_PAYSTACK_PUBLIC_KEY,
   };
 
   // Initialize paystack payment with the config values
   const initializePayment = usePaystackPayment(config);
 
-  const onSuccess = (reference) => {
-    // Create a new post reference with an auto-generated id
-    const orderListRef = ref(db, "allOrders");
-    const newOrderRef = push(orderListRef);
-
-    // Add new order and some info to our orders list
-    set(newOrderRef, {
+  const addOrderToDB = async (reference) => {
+    // Add a new document with a generated id.
+    const docRef = await addDoc(collection(db, "allOrders"), {
       reference,
       paymentInfo,
       order: [...cart],
@@ -62,6 +58,10 @@ const CheckoutOverlay = () => {
 
     // Remove payment overlay
     setAppState((prev) => ({ ...prev, showOverlay: false }));
+  };
+
+  const onSuccess = (reference) => {
+    addOrderToDB(reference);
   };
 
   const onClose = () => {
@@ -87,7 +87,7 @@ const CheckoutOverlay = () => {
 
   return (
     <div className="fixed top-0 left-0 h-screen w-screen z-50">
-      <div className="absolute bg-white top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 py-8 px-10 lg:w-1/2 w-96 shadow-xl space-y-6 rounded-md">
+      <div className="absolute bg-white top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 py-8 px-10 lg:w-1/2 md:w-96 w-[80%] shadow-xl space-y-6 rounded-md">
         <h1 className="text-lg text-primary font-poppins font-medium">
           Please fill in your delivery information.
         </h1>

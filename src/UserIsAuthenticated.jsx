@@ -1,16 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
 import OrderItem from "./components/OrderItem";
-import { ref, onValue } from "firebase/database";
+import { collection, query, onSnapshot } from "firebase/firestore";
 import { db } from "./firebase";
 import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
 
-// TODO: Migrate DB to firebase-firestore. Because this realtime db is some bullshit
-
 const UserIsAuthenticated = () => {
   const { appState, setAppState } = useAppState();
 
-  const [allOrders, setAllOrders] = useState(null);
+  const [allOrders, setAllOrders] = useState([]);
 
   const [orderCompleted, setOrderCompleted] = useState(false);
 
@@ -20,27 +18,25 @@ const UserIsAuthenticated = () => {
 
   // Function to confirm that the admin wants to complete an order
   const handleConfirmation = () => {
-    parentRef.current.completeOrder();
+    parentRef.current.startOrderCompletion();
   };
 
   useEffect(() => {
-    const allOrdersRef = ref(db, "allOrders");
+    const orderQuery = query(collection(db, "allOrders"));
 
-    onValue(allOrdersRef, (snapshot) => {
-      if (!snapshot.exists()) return;
+    const unsubscribe = onSnapshot(orderQuery, (querySnapshot) => {
+      const orders = [];
 
-      const data = snapshot.val();
+      querySnapshot.forEach((doc) => {
+        orders.push({ ...doc.data(), orderId: doc.id });
+      });
 
-      const mappedOrders = Object.entries(data).map((entry) => ({
-        orderId: entry[0],
-        order: entry[1].order,
-        paymentInfo: entry[1].paymentInfo,
-        timestamp: entry[1].timestamp,
-      }));
-
-      setAllOrders(mappedOrders);
-      setOrderCompleted(false);
+      setAllOrders(orders);
     });
+
+    return () => {
+      unsubscribe();
+    };
   }, [orderCompleted]);
 
   return (
@@ -66,7 +62,7 @@ const UserIsAuthenticated = () => {
           </div>
         </div>
       )}
-      {!allOrders ? (
+      {!allOrders.length ? (
         <h1 className="text-xl">
           No orders yet. Get of your butts and go reach out to potential
           customers.
@@ -82,7 +78,8 @@ const UserIsAuthenticated = () => {
             {allOrders.map((orderDetails, index) => (
               <OrderItem
                 orderDetails={orderDetails}
-                key={orderDetails.orderId}
+                orderId={orderDetails.orderId}
+                key={`${orderDetails.orderId} - ${index}`}
                 index={index}
                 orderCompleted={orderCompleted}
                 setOrderCompleted={setOrderCompleted}

@@ -8,9 +8,9 @@ export const AppStateProvider = ({ children }) => {
     showCart: true,
     showOverlay: false,
     paymentInfo: {
-      email: "baze@student.com",
+      email: "school@student.com",
       phoneNumber: "12345678963",
-      deliveryLocation: "Block D Auditorium",
+      deliveryLocation: "Block Auditorium",
     },
     showAdminOverlay: false,
   });

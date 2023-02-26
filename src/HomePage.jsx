@@ -12,6 +12,8 @@ const HomePage = () => {
   const { appState, setAppState } = useAppState();
   const { screenWidth } = useScreenState();
 
+  const { cart } = appState;
+
   return (
     <div className="w-full h-full">
       {/* Nav */}
@@ -36,11 +38,13 @@ const HomePage = () => {
                   setAppState((prev) => ({ ...prev, showCart: true }));
                 }}
               >
-                <div className="absolute top-1 -right-[2px] flex justify-center items-center">
-                  <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
+                {cart.length ? (
+                  <div className="absolute top-1 -right-[2px] flex justify-center items-center">
+                    <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
 
-                  <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
-                </div>
+                    <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
+                  </div>
+                ) : null}
 
                 <ShoppingCartOutlinedIcon
                   className="text-white"
@@ -67,11 +71,13 @@ const HomePage = () => {
               setAppState((prev) => ({ ...prev, showCart: true }));
             }}
           >
-            <div className="absolute top-1 -right-[2px] flex justify-center items-center">
-              <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
+            {cart.length ? (
+              <div className="absolute top-1 -right-[2px] flex justify-center items-center">
+                <span className="animate-ping absolute inline-flex h-4 w-4 rounded-full bg-red-700 opacity-75"></span>
 
-              <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
-            </div>
+                <span className="absolute h-2 w-2 rounded-full bg-red-700"></span>
+              </div>
+            ) : null}
 
             <ShoppingCartOutlinedIcon
               className="text-white"
