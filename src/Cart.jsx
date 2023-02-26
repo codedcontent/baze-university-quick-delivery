@@ -3,15 +3,32 @@ import CartItems from "./components/CartItems";
 import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
 import { Close } from "@mui/icons-material";
+import constants from "./constants/constants";
 
 const Cart = () => {
   const { appState, setAppState } = useAppState();
 
   const { cart } = appState;
 
-  const cartTotal = cart
-    .map((item) => item.price * item.mealCount)
-    .reduce((accumulator, currentValue) => accumulator + currentValue, 0);
+  const cartTotal =
+    cart
+      .map((item) => item.price * item.mealCount)
+      .reduce((accumulator, currentValue) => accumulator + currentValue, 0) +
+    constants.deliveryFee;
+
+  let amountToCharge = 0;
+
+  const amountToChargeIfBellow25 = parseInt((cartTotal / 0.985 + 1).toFixed(0));
+
+  if (amountToChargeIfBellow25 >= 2500) {
+    const amountToChargeIfAbove = parseInt(
+      (cartTotal + 100) / 0.985 + 1
+    ).toFixed(0);
+
+    amountToCharge = amountToChargeIfAbove - cartTotal;
+  } else {
+    amountToCharge = amountToChargeIfBellow25 - cartTotal;
+  }
 
   return (
     <div
@@ -63,19 +80,15 @@ const Cart = () => {
       {cart.length > 0 && (
         <div className="w-full py-2 bg-white px-10 border-y-[1px] absolute left-0 bottom-0 space-y-2">
           <p className="text-sm">
-            Take away pack --{" "}
+            Service fee --{" "}
             <span className="font-bold">
-              ₦ 100 * {cart.length} = {cart.length * 100}
+              ₦ {constants.deliveryFee + amountToCharge}
             </span>
-          </p>
-
-          <p className="text-sm">
-            Delivery fee -- <span className="font-bold">₦ 200</span>
           </p>
 
           <div className="flex w-full justify-between">
             <MyButton
-              title={"Make an order"}
+              title={"Place order"}
               buttonAction={() => {
                 setAppState((prev) => ({ ...prev, showOverlay: true }));
               }}
@@ -84,7 +97,10 @@ const Cart = () => {
             <div className="flex flex-col justify-center items-center">
               <p className="">Total</p>
               <p className="text-sm font-bold">
-                ₦ {cartTotal.toFixed(1).replace(/\d(?=(\d{3})+\.)/g, "$&,")}
+                ₦{" "}
+                {(cartTotal + amountToCharge)
+                  .toFixed(2)
+                  .replace(/\d(?=(\d{3})+\.)/g, "$&,")}
               </p>
             </div>
           </div>

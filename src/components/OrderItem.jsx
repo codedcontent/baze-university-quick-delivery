@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useImperativeHandle } from "react";
 import { ref, remove } from "firebase/database";
 import { db } from "../firebase";
+import useAppState from "../hooks/useAppState";
 
 const formatter = new Intl.NumberFormat("en-US", {
   style: "currency",
@@ -8,20 +9,27 @@ const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
-const OrderItem = ({ orderDetails, index, setOrderCompleted }) => {
-  const { phoneNumber, order } = orderDetails;
+const OrderItem = ({ orderDetails, index, setOrderCompleted, innerRef }) => {
+  const { setAppState } = useAppState();
+
+  const { paymentInfo, order } = orderDetails;
 
   // The total amount that the customer will buy for all the meals they ordered.
   const totalAmountToPay = order
     .map((orderItem) => orderItem.price)
     .reduce((acc, currentVal) => acc + currentVal);
 
-  const completeOrder = () => {
-    const orderToCompleteRef = ref(db, `allOrders/${orderDetails.orderId}`);
+  useImperativeHandle(innerRef, () => ({
+    completeOrder() {
+      const orderToCompleteRef = ref(db, `allOrders/${orderDetails.orderId}`);
 
-    remove(orderToCompleteRef);
-    setOrderCompleted(true);
-  };
+      remove(orderToCompleteRef);
+
+      setOrderCompleted(true);
+
+      setAppState((prev) => ({ ...prev, showAdminOverlay: false }));
+    },
+  }));
 
   return (
     <div className="space-y-2">
@@ -59,14 +67,26 @@ const OrderItem = ({ orderDetails, index, setOrderCompleted }) => {
         {/* Customer contact */}
         <span className="text-sm font-bold flex justify-between items-center w-full gap-4">
           Customer contact:{" "}
-          <span className="text-secondary font-normal underline">
-            {phoneNumber}
+          <a href={`tel:${paymentInfo.phoneNumber}`}>
+            <span className="text-secondary font-normal underline">
+              {paymentInfo.phoneNumber}
+            </span>
+          </a>
+        </span>
+
+        {/* Delivery location */}
+        <span className="text-sm font-bold flex justify-between items-center w-full gap-4">
+          Delivery location:{" "}
+          <span className="text-secondary font-normal">
+            {paymentInfo.deliveryLocation}
           </span>
         </span>
 
         <button
           className="py-2 cursor-pointer bg-secondary text-white px-4 rounded-md flex justify-center items-center"
-          onClick={completeOrder}
+          onClick={() => {
+            setAppState((prev) => ({ ...prev, showAdminOverlay: true }));
+          }}
         >
           Completed Order
         </button>

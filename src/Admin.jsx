@@ -1,13 +1,10 @@
 import React, { useEffect, useState } from "react";
 import MyButton from "./components/MyButton";
-import OrderItem from "./components/OrderItem";
-import { ref, onValue } from "firebase/database";
-import { db } from "./firebase";
+import UserIsAuthenticated from "./UserIsAuthenticated";
 
 const Admin = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
   const [password, setPassword] = useState("");
-  const [orderCompleted, setOrderCompleted] = useState(false);
 
   const UserNotAuthenticated = () => {
     return (
@@ -39,60 +36,6 @@ const Admin = () => {
 
           <MyButton title={"Login"} buttonAction={handleLogin} type="submit" />
         </form>
-      </div>
-    );
-  };
-
-  const UserIsAuthenticated = () => {
-    const [allOrders, setAllOrders] = useState(null);
-
-    useEffect(() => {
-      const allOrdersRef = ref(db, "allOrders");
-
-      onValue(allOrdersRef, (snapshot) => {
-        if (!snapshot.exists()) return;
-
-        const data = snapshot.val();
-
-        const mappedOrders = Object.entries(data).map((entry) => ({
-          orderId: entry[0],
-          order: entry[1].order,
-          phoneNumber: entry[1].phoneNumber,
-          timestamp: entry[1].timestamp,
-        }));
-
-        setAllOrders(mappedOrders);
-        setOrderCompleted(false);
-      });
-    }, [orderCompleted]);
-
-    return (
-      <div className="h-full w-full md:px-20 px-10 md:py-10 py-5">
-        {!allOrders ? (
-          <h1 className="text-xl">
-            No orders yet. Get of your butts and go reach out to potential
-            customers.
-          </h1>
-        ) : (
-          <>
-            <p className="font-semibold text-lg text-accent">
-              Here are the orders coming in, fulfill them fast, LET'S GOOOOOO
-              🚀🚀🚀
-            </p>
-
-            <div className="flex flex-wrap mt-10 gap-4">
-              {allOrders.map((orderDetails, index) => (
-                <OrderItem
-                  orderDetails={orderDetails}
-                  key={orderDetails.orderId}
-                  index={index}
-                  orderCompleted={orderCompleted}
-                  setOrderCompleted={setOrderCompleted}
-                />
-              ))}
-            </div>
-          </>
-        )}
       </div>
     );
   };

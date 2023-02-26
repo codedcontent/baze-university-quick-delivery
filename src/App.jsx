@@ -4,9 +4,7 @@ import HomePage from "./HomePage";
 import useAppState from "./hooks/useAppState";
 import useScreenState from "./hooks/useScreenState";
 import { useEffect } from "react";
-import MyButton from "./components/MyButton";
-import { db, push, set, ref } from "./firebase";
-import { serverTimestamp } from "firebase/database";
+import CheckoutOverlay from "./CheckoutOverlay";
 
 function App() {
   const { appState, setAppState } = useAppState();
@@ -24,70 +22,10 @@ function App() {
     }
   }, [screenWidth]);
 
-  const handleChange = (value) => {
-    setAppState((prev) => ({ ...prev, phoneNumber: value }));
-  };
-
-  // Make order
-  const makeOrder = () => {
-    if (!phoneNumber || phoneNumber.length < 10) {
-      alert("Phone number is not valid");
-    } else {
-      // Create a new post reference with an auto-generated id
-      const postListRef = ref(db, "allOrders");
-
-      const newPostRef = push(postListRef);
-
-      set(newPostRef, {
-        phoneNumber,
-        order: [...cart],
-        timestamp: serverTimestamp(),
-      });
-
-      alert("Order successful. We'll contact you soon.");
-
-      // Clear cart
-      setAppState((prev) => ({ ...prev, cart: [] }));
-
-      setAppState((prev) => ({ ...prev, showOverlay: false }));
-    }
-  };
-
   return (
     <div className="relative h-screen">
       {/* Overlay */}
-      {showOverlay && (
-        <div className="fixed top-0 left-0 h-screen w-screen z-50">
-          <div className="absolute bg-white top-1/2 left-1/2 -translate-y-1/2 -translate-x-1/2 p-10 lg:w-1/2 w-96 shadow-xl space-y-5">
-            <h1 className="text-lg text-primary font-poppins font-medium">
-              Please provide some details so we can contact you when your order
-              is ready.
-            </h1>
-
-            <input
-              type="text"
-              placeholder="Your valid phone number..."
-              className="w-full py-2 px-2 outline-none border-l-2"
-              value={phoneNumber}
-              onChange={(e) => {
-                handleChange(e.target.value);
-              }}
-            />
-
-            <div className="flex gap-4 justify-end items-center">
-              <MyButton title={"Submit"} buttonAction={makeOrder} />
-
-              <MyButton
-                title={"Cancel"}
-                variant="outlined"
-                buttonAction={() => {
-                  setAppState((prev) => ({ ...prev, showOverlay: false }));
-                }}
-              />
-            </div>
-          </div>
-        </div>
-      )}
+      {showOverlay && <CheckoutOverlay />}
 
       {/* Banner */}
       <Banner />

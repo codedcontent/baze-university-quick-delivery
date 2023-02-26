@@ -7,7 +7,12 @@ export const AppStateProvider = ({ children }) => {
     cart: [],
     showCart: true,
     showOverlay: false,
-    phoneNumber: "",
+    paymentInfo: {
+      email: "baze@student.com",
+      phoneNumber: "12345678963",
+      deliveryLocation: "Block D Auditorium",
+    },
+    showAdminOverlay: false,
   });
 
   return (
