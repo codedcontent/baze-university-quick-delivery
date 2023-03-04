@@ -6,6 +6,8 @@ import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
 import loadingBeanEater from "./assets/Bean Eater-1s-200px.svg";
 
+// TODO: FIX_ERROR => User completing the wrong orders
+
 const UserIsAuthenticated = () => {
   const { appState, setAppState } = useAppState();
 
