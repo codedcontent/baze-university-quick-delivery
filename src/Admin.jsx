@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import MyButton from "./components/MyButton";
 import UserIsAuthenticated from "./UserIsAuthenticated";
 

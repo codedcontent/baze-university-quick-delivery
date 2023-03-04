@@ -10,7 +10,7 @@ export const AppStateProvider = ({ children }) => {
     paymentInfo: {
       email: "school@student.com",
       phoneNumber: "12345678963",
-      deliveryLocation: "Block Auditorium",
+      deliveryLocation: "",
     },
     showAdminOverlay: false,
   });
