@@ -13,6 +13,7 @@ export const AppStateProvider = ({ children }) => {
       deliveryLocation: "",
     },
     showAdminOverlay: false,
+    orderIdToComplete: null
   });
 
   return (

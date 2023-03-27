@@ -133,7 +133,7 @@ const HomePage = () => {
         <div className="grid md:grid-cols-3 grid-cols-1 lg:mt-10 md:mt-8 mt-4 gap-y-3">
           <MenuItem mealName={"Chicken"} mealImage={img1} price={1500} />
           <MenuItem mealName={"Jollof Rice"} mealImage={img2} price={900} />
-          <MenuItem mealName={"Fried Rice"} mealImage={img3} price={10} />
+          <MenuItem mealName={"Fried Rice"} mealImage={img3} price={800} />
         </div>
       </div>
     </div>

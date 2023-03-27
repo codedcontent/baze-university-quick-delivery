@@ -9,6 +9,9 @@ const formatter = new Intl.NumberFormat("en-US", {
   minimumFractionDigits: 2,
 });
 
+// TODO: FIX_ERROR => User completing the wrong orders
+// TODO: To mitigate this error set an app state prop indicating the order to be completed
+
 const OrderItem = ({
   orderDetails,
   orderId,
@@ -16,26 +19,31 @@ const OrderItem = ({
   setOrderCompleted,
   innerRef,
 }) => {
-  const { setAppState } = useAppState();
+  const { appState, setAppState } = useAppState();
 
   const { paymentInfo, order } = orderDetails;
+
+  // console.log(orderDetails.orderId);
 
   // The total amount that the customer will buy for all the meals they ordered.
   const totalAmountToPay = order
     .map((orderItem) => orderItem.price)
     .reduce((acc, currentVal) => acc + currentVal);
 
-  const completeOrder = async () => {
+  // This is the function to fullfil a users order
+  const fullfilOrder = async () => {
     setOrderCompleted(true);
+
+    console.log({ orderIdToBeCompleted: orderDetails.orderId });
 
     setAppState((prev) => ({ ...prev, showAdminOverlay: false }));
 
-    await deleteDoc(doc(db, `allOrders/${orderDetails.orderId}`));
+    await deleteDoc(doc(db, `allOrders/${appState.orderIdToComplete}`));
   };
 
   useImperativeHandle(innerRef, () => ({
     startOrderCompletion() {
-      completeOrder();
+      fullfilOrder();
     },
   }));
 
@@ -93,7 +101,12 @@ const OrderItem = ({
         <button
           className="py-2 cursor-pointer bg-secondary text-white px-4 rounded-md flex justify-center items-center"
           onClick={() => {
-            setAppState((prev) => ({ ...prev, showAdminOverlay: true }));
+            // Open the admin overlay and set the order id to be completed
+            setAppState((prev) => ({
+              ...prev,
+              showAdminOverlay: true,
+              orderIdToComplete: orderDetails.orderId,
+            }));
           }}
         >
           Completed Order

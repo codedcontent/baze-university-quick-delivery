@@ -1,12 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
 import OrderItem from "./components/OrderItem";
-import { collection, query, onSnapshot } from "firebase/firestore";
+import { collection, query, onSnapshot, orderBy } from "firebase/firestore";
 import { db } from "./firebase";
 import MyButton from "./components/MyButton";
 import useAppState from "./hooks/useAppState";
 import loadingBeanEater from "./assets/Bean Eater-1s-200px.svg";
-
-// TODO: FIX_ERROR => User completing the wrong orders
 
 const UserIsAuthenticated = () => {
   const { appState, setAppState } = useAppState();
@@ -25,7 +23,7 @@ const UserIsAuthenticated = () => {
   };
 
   useEffect(() => {
-    const orderQuery = query(collection(db, "allOrders"));
+    const orderQuery = query(collection(db, "allOrders"), orderBy("timestamp"));
 
     const unsubscribe = onSnapshot(orderQuery, (querySnapshot) => {
       const orders = [];
@@ -53,10 +51,12 @@ const UserIsAuthenticated = () => {
           {showAdminOverlay && (
             <div className="absolute h-screen w-screen top-0 left-0 bg-black/50">
               <div className="transform -translate-x-1/2 -translate-y-1/2 absolute top-1/2 left-1/2 md:w-96 w-[80%] h-48 bg-white px-10 rounded-md space-y-4 flex justify-center items-center flex-col">
+                {/* Confirmation text */}
                 <p className="text-accent">
                   Are you sure you want to complete this order?
                 </p>
 
+                {/* Button group */}
                 <div className="flex justify-end items-center gap-6 self-end">
                   <MyButton title={"Yes"} buttonAction={handleConfirmation} />
 
@@ -64,9 +64,11 @@ const UserIsAuthenticated = () => {
                     title={"No"}
                     variant="outlined"
                     buttonAction={() => {
+                      // Close the admin overlay and set the order id to be completed as null
                       setAppState((prev) => ({
                         ...prev,
                         showAdminOverlay: false,
+                        orderIdToComplete: null,
                       }));
                     }}
                   />
@@ -90,7 +92,6 @@ const UserIsAuthenticated = () => {
                 {allOrders.map((orderDetails, index) => (
                   <OrderItem
                     orderDetails={orderDetails}
-                    orderId={orderDetails.orderId}
                     key={`${orderDetails.orderId} - ${index}`}
                     index={index}
                     orderCompleted={orderCompleted}
